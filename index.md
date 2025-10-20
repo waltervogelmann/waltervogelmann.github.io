@@ -4,6 +4,9 @@ title: "Welcome to My Data Science Portfolio"
 
 # Hello! I'm Walter Vogelmann 👋
 
+
+FIX THIS
+
 Welcome to my data science portfolio! This site shows my journey learning data science and analytics. Here you'll find projects that demonstrate what I've learned and discovered.
 
 ## 🎓 About This Portfolio
@@ -29,7 +32,7 @@ I built this site using [Quarto](https://quarto.org/) and host it on [GitHub Pag
 
 ::: {.g-col-6}
 ### [Data Exploration Project](projects/eda.qmd)
-Learn how I explore datasets to find interesting patterns and answer questions!!!
+Learn how I explore datasets to find interesting patterns and answer questions.
 :::
 
 ::: {.g-col-6}
