@@ -2,7 +2,7 @@
 title: "About Me"
 ---
 
-(WalterVogelmannHeadshot.png)
+![](WalterVogelmannHeadshot.png){width=50%}
 
 ## Background
 
