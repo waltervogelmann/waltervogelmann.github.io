@@ -1,5 +1,5 @@
 ---
-title: "Data Acquisition Project"
+title: "Data Tutorial Blog Project"
 author: "Walter Vogelmann"
 date: "2025-10-24"
 format:
