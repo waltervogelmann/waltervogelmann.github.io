@@ -2,6 +2,8 @@
 title: "About Me"
 ---
 
+(WalterVogelmannHeadshot.png)
+
 ## Background
 
 - I'm a highly motivated and versatile statistics student at Brigham Young University, where I am pursuing a Bachelor's degree in Statistics and Data Analytics with Minors in Mathematics and French.
