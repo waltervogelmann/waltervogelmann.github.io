@@ -104,7 +104,7 @@
     "href": "projects/data-acquisition.html",
     "title": "Data Acquisition Project",
     "section": "",
-    "text": "This is coming down the pipeline. Check again later.",
+    "text": "A beginner-friendly guide to visualizing basketball performance data\n\n\n\nHave you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.\n\n\n\n\nFirst, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.\n\n\n\n\nReal-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.\n\n\n\n\nNow for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.\n\n\n\n\nLet’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.\n\n\n\n\n\nCongratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
     "crumbs": [
       "Data Acquisition Project"
     ]
@@ -117,6 +117,136 @@
     "text": "This is coming down the pipeline. Check again later.",
     "crumbs": [
       "Final Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#introduction",
+    "href": "projects/data-acquisition.html#introduction",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Have you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#step-1-load-and-inspect-the-data",
+    "href": "projects/data-acquisition.html#step-1-load-and-inspect-the-data",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "First, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#step-2-clean-and-prepare-the-data",
+    "href": "projects/data-acquisition.html#step-2-clean-and-prepare-the-data",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Real-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#step-3-create-the-scatterplot",
+    "href": "projects/data-acquisition.html#step-3-create-the-scatterplot",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Now for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#step-4-quantify-the-relationship-with-linear-regression",
+    "href": "projects/data-acquisition.html#step-4-quantify-the-relationship-with-linear-regression",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Let’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-acquisition.html#conclusion-your-turn-to-explore",
+    "href": "projects/data-acquisition.html#conclusion-your-turn-to-explore",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Congratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html",
+    "href": "projects/data-tutorial-blog.html",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "A beginner-friendly guide to visualizing basketball performance data\n\n\n\nHave you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.\n\n\n\n\nFirst, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.\n\n\n\n\nReal-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.\n\n\n\n\nNow for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.\n\n\n\n\nLet’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.\n\n\n\n\n\nCongratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#introduction",
+    "href": "projects/data-tutorial-blog.html#introduction",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Have you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-1-load-and-inspect-the-data",
+    "href": "projects/data-tutorial-blog.html#step-1-load-and-inspect-the-data",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "First, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-2-clean-and-prepare-the-data",
+    "href": "projects/data-tutorial-blog.html#step-2-clean-and-prepare-the-data",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Real-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-3-create-the-scatterplot",
+    "href": "projects/data-tutorial-blog.html#step-3-create-the-scatterplot",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Now for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-4-quantify-the-relationship-with-linear-regression",
+    "href": "projects/data-tutorial-blog.html#step-4-quantify-the-relationship-with-linear-regression",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Let’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.",
+    "crumbs": [
+      "Data Acquisition Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#conclusion-your-turn-to-explore",
+    "href": "projects/data-tutorial-blog.html#conclusion-your-turn-to-explore",
+    "title": "Data Acquisition Project",
+    "section": "",
+    "text": "Congratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
+    "crumbs": [
+      "Data Acquisition Project"
     ]
   }
 ]

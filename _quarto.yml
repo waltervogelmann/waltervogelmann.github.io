@@ -20,8 +20,8 @@ website:
           - text: "---"
           - text: "Exploratory Data Analysis"
             href: projects/eda.qmd
-          - text: "Data Acquisition"
-            href: projects/data-acquisition.qmd
+          - text: "Data Tutorial Blog"
+            href: projects/data-tutorial-blog.qmd
           - text: "Final Project"
             href: projects/final-project.qmd
     right:
@@ -35,7 +35,7 @@ website:
       contents:
         - projects/index.md
         - projects/eda.qmd
-        - projects/data-acquisition.qmd
+        - projects/data-tutorial-blog.qmd
         - projects/final-project.qmd
 
 format:
