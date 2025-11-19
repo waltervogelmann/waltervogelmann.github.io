@@ -1,0 +1,255 @@
+[
+  {
+    "objectID": "about.html#background",
+    "href": "about.html#background",
+    "title": "About Me",
+    "section": "Background",
+    "text": "Background\n\nI’m a highly motivated and versatile statistics student at Brigham Young University, where I am pursuing a Bachelor’s degree in Statistics and Data Analytics with Minors in Mathematics and French.\nI have built a strong academic foundation, with coursework in Bayesian Statistics, Tableau, SQL, Linux, and AWS.\nGaining hands-on experience through my role in the BYU Men’s Basketball Internship, where I work on statistical projects analyzing player performance and scouting.\nAlso involved in leadership roles, serving as President of the BYU Statistics Academic Association and as Financial Officer for the BYU Sports Analytics Club.\nFluent in French and proficient in R and Python, and I combine my analytical skills with strong communication, honed through teaching French and leading volunteer teams during my missionary service in France.\nMy adaptability, leadership, and teamwork skills make me an asset in both acade and professional environments."
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "About Me",
+    "section": "Education",
+    "text": "Education\n\nApplied Statistics and Data Analytics - Brigham Young University, (Expected Graduation: April 2026)\nRelevant Coursework: Statistics, Data Analysis, Programming, Bayesian Theory, Sports Analytics, etc."
+  },
+  {
+    "objectID": "about.html#skills-interests",
+    "href": "about.html#skills-interests",
+    "title": "About Me",
+    "section": "Skills & Interests",
+    "text": "Skills & Interests\n\nTechnical Skills\n\nProgramming: R, Python\nData Analysis: Pandas, NumPy\nVisualization: Matplotlib, Tableau\nMachine Learning: Scikit-learn\nTools: Jupyter Notebooks, Git/GitHub\n\n\n\nAreas of Interest\n\nI am very interested in Sports Analytics, as well as general industry applications of data analysis.\nI would love to get more experience in business analytics, statistical research, and even the teaching of statistics."
+  },
+  {
+    "objectID": "about.html#goals",
+    "href": "about.html#goals",
+    "title": "About Me",
+    "section": "Goals",
+    "text": "Goals\nWhat I hope to achieve through my data science journey:\n\nHoping to obtain a Masters of Statistics, followed by industry work\nI want to eventually link my passion for sports with data analysis in a professional setting"
+  },
+  {
+    "objectID": "about.html#contact",
+    "href": "about.html#contact",
+    "title": "About Me",
+    "section": "Contact",
+    "text": "Contact\n\nEmail: walterjvogelmann@gmail.com\nGitHub: https://github.com/waltervogelmann\nLinkedIn: www.linkedin.com/in/wvogelmann\n\n\nThis portfolio showcases my learning progress and projects completed during my data science studies."
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html",
+    "href": "projects/data-tutorial-blog.html",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "A beginner-friendly guide to visualizing basketball performance data\n\n\n\nHave you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.\n\n\n\n\nFirst, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.\n\n\n\n\nReal-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.\n\n\n\n\nNow for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.\n\n\n\n\nLet’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.\n\n\n\n\n\nCongratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#introduction",
+    "href": "projects/data-tutorial-blog.html#introduction",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "Have you ever wondered if playing more minutes actually leads to scoring more points in basketball? It seems obvious, but how strong is that relationship? In this tutorial, you’ll learn how to answer questions like this using Python, pandas, and matplotlib.\nWe’ll work through a complete workflow: - Loading and inspecting player statistics - Cleaning messy data - Creating a professional scatterplot - Adding a regression line to quantify the relationship\nBy the end, you’ll have a reusable template for exploring correlations in any sport or dataset.",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-1-load-and-inspect-the-data",
+    "href": "projects/data-tutorial-blog.html#step-1-load-and-inspect-the-data",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "First, let’s load our basketball statistics and take a quick look at what we’re working with.\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Load the data\ndf = pd.read_csv('player_stats.csv')\n\n# Display first few rows\nprint(df.head())\nHere’s what our dataset looks like:\n\n\n\nPlayer\nMinutes\nPoints\nRebounds\n\n\n\n\nLeBron James\n35.2\n27.1\n7.5\n\n\nStephen Curry\n34.3\n29.4\n5.2\n\n\nKevin Durant\n36.9\n29.7\n7.1\n\n\nGiannis Antetokounmpo\n32.8\n31.1\n11.6\n\n\nJoel Embiid\n33.1\n33.1\n10.2\n\n\n\nEach row represents a player’s per-game averages for the season.",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-2-clean-and-prepare-the-data",
+    "href": "projects/data-tutorial-blog.html#step-2-clean-and-prepare-the-data",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "Real-world data is rarely perfect. Let’s check for issues and clean our dataset.\n# Check for missing values\nprint(df.isnull().sum())\n\n# Check data types\nprint(df.dtypes)\n\n# Remove any rows with missing values\ndf_clean = df.dropna()\n\n# Ensure Minutes and Points are numeric\ndf_clean['Minutes'] = pd.to_numeric(df_clean['Minutes'], errors='coerce')\ndf_clean['Points'] = pd.to_numeric(df_clean['Points'], errors='coerce')\n\n# Remove any rows that couldn't be converted to numeric\ndf_clean = df_clean.dropna()\n\nprint(f\"Dataset now has {len(df_clean)} complete records\") # Output: Dataset now has 20 complete records\nWhy this matters: Missing or incorrectly formatted data can cause errors or misleading visualizations. Always inspect and clean your data before analysis.",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-3-create-the-scatterplot",
+    "href": "projects/data-tutorial-blog.html#step-3-create-the-scatterplot",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "Now for the fun part—visualizing the relationship between minutes played and points scored.\n# Create figure and axis\nplt.figure(figsize=(10, 6))\n\n# Create scatterplot\nplt.scatter(df_clean['Minutes'], df_clean['Points'], \n            alpha=0.6, s=100, color='steelblue', edgecolors='black')\n\n# Add labels and title\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Relationship Between Playing Time and Scoring', fontsize=14, fontweight='bold')\n\n# Add grid for readability\nplt.grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\nHere’s what the visualization looks like:\n\n\n\nScatterplot showing the positive relationship between minutes played per game and points scored per game for NBA players\n\n\nThis scatterplot makes the positive relationship immediately visible—players who log more minutes tend to score more points.",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#step-4-quantify-the-relationship-with-linear-regression",
+    "href": "projects/data-tutorial-blog.html#step-4-quantify-the-relationship-with-linear-regression",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "Let’s fit a regression line to quantify exactly how minutes relate to points.\n# Compute slope and intercept using NumPy\nx = df_clean['Minutes'].to_numpy()\ny = df_clean['Points'].to_numpy()\n\n# Calculate slope (m) and intercept (b) using least squares\nslope, intercept = np.polyfit(x, y, 1)\n\n# Compute predicted values for regression line\nline_x = np.array([x.min(), x.max()])\nline_y = slope * line_x + intercept\n\n# Compute R² manually\ny_pred = slope * x + intercept\nss_res = np.sum((y - y_pred) ** 2)\nss_tot = np.sum((y - np.mean(y)) ** 2)\nr_squared = 1 - (ss_res / ss_tot)\n\n# Plot scatterplot with regression line\nplt.figure(figsize=(10, 6))\nplt.scatter(x, y, alpha=0.6, s=100, color='steelblue', edgecolors='black', label='Players')\nplt.plot(line_x, line_y, color='red', linewidth=2, label='Regression Line')\n\nplt.xlabel('Minutes Per Game', fontsize=12)\nplt.ylabel('Points Per Game', fontsize=12)\nplt.title('Minutes vs. Points with Regression Line', fontsize=14, fontweight='bold')\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.tight_layout()\nplt.show()\n\n# Display the equation and R²\nprint(f\"Regression equation: Points = {intercept:.2f} + {slope:.2f} × Minutes\") # Output: Regression equation: Points = 22.58 + 0.14 × Minutes \nprint(f\"R² = {r_squared:.3f}\") # Output: R² = 0.006\n\n\n\nScatterplot with red regression line showing the linear relationship between playing time and scoring output\n\n\nThe regression line helps us quantify this relationship precisely.\n\n\nOur regression equation is:\n\\[\\text{Points} = \\beta_0 + \\beta_1 \\cdot \\text{Minutes}\\]\nWhere: - \\(\\beta_0\\) (intercept) represents the baseline points when minutes = 0 - \\(\\beta_1\\) (slope) tells us how many additional points we expect per additional minute played\nFor example, if our equation is:\n\\[\\text{Points} = -5.23 + 1.02 \\cdot \\text{Minutes}\\]\nThis means each additional minute played is associated with approximately 1.02 more points per game.\nThe \\(R^2\\) value tells us what percentage of the variation in points can be explained by minutes played. An \\(R^2\\) of 0.65 means minutes explain 65% of the scoring variation.",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/data-tutorial-blog.html#conclusion-your-turn-to-explore",
+    "href": "projects/data-tutorial-blog.html#conclusion-your-turn-to-explore",
+    "title": "Data Tutorial Blog Project",
+    "section": "",
+    "text": "Congratulations! You’ve just completed a full data analysis workflow:\n✅ Loaded and inspected real data\n✅ Cleaned and prepared it for analysis\n✅ Created a professional visualization\n✅ Quantified relationships with linear regression\n\n\nTry this yourself: Clone this GitHub repository and run the Jupyter notebook. Then, modify the code to explore different relationships:\n\nHockey fans: Download NHL data and analyze shots vs. goals\nSoccer enthusiasts: Explore assists vs. goals scored\nBaseball lovers: Investigate at-bats vs. home runs\n\nHave fun experimenting, and share your results with others, myself included!\nWant to go deeper? Check out these resources: - Pandas documentation on data cleaning - Matplotlib gallery for plot inspiration - Understanding correlation vs. causation\nHappy analyzing! 📊🏀\n\nPublished on October 24, 2025 | Walter Vogelmann",
+    "crumbs": [
+      "Data Tutorial Blog Project"
+    ]
+  },
+  {
+    "objectID": "projects/final-project.html",
+    "href": "projects/final-project.html",
+    "title": "Final Project",
+    "section": "",
+    "text": "This is coming down the pipeline. Check again later.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html",
+    "href": "projects/eda.html",
+    "title": "EDA Project",
+    "section": "",
+    "text": "Every baseball fan has heard the mantra: “Get ahead in the count.” Pitching coaches preach it, announcers repeat it, and players live by it. But how much does that first pitch actually matter? Is starting an at-bat 0-1 versus 1-0 just conventional wisdom, or is there real data to back up the psychological advantage?\nAs someone who’s spent countless hours watching baseball, I’ve always been curious about the mental chess match between pitcher and batter. That first pitch sets the tone for everything that follows—but I wanted to move beyond intuition and quantify exactly how outcomes differ based on whether pitchers throw a strike or ball on pitch number one.\n\n\n\nMy research question: How do at-bat outcomes differ when pitchers throw a strike versus a ball on the first pitch, controlling for batter aggression?\nThis question matters because it gets at the heart of in-game strategy. Should aggressive batters swing at the first pitch? Do passive batters benefit more from getting ahead in the count? Understanding these dynamics could inform coaching decisions and help us appreciate the subtle psychology playing out in every plate appearance.\n\n\n\nBefore diving into web scraping, I needed to ensure my data collection was both ethical and legal. MLB’s Statcast system provides incredibly detailed pitch-by-pitch data, and their copyright policy explicitly permits individual, non-commercial use of this data—perfect for academic projects like this one.\nI used the pybaseball Python library, which serves as an approved wrapper for MLB’s publicly available Statcast API. No API key is required, and the library includes built-in rate limiting and caching to be respectful of MLB’s servers. This approach follows best practices for ethical data collection:\n\nPublic data source: Statcast data is publicly accessible\nRate limiting: Automatic delays between requests prevent server overload\nTerms compliance: Non-commercial academic use is explicitly allowed\nAttribution: All data properly credited to MLB Advanced Media\n\n\n\n\nIf you want to explore MLB data for your own project, here’s the streamlined process:\n\n\npip install pybaseball pandas numpy matplotlib seaborn scipy\n\n\n\nfrom pybaseball import statcast, cache\nimport pandas as pd\n\n# Enable caching to speed up repeated queries\ncache.enable()\n\n# Collect pitch-by-pitch data for 2024 season\ndata = statcast(start_dt='2024-04-01', end_dt='2024-09-30')\nThis single function call retrieves every pitch thrown during the specified time period, including detailed information about location, velocity, spin rate, and outcomes.\n\n\n\nThe beauty of Statcast data is that each pitch includes a pitch_number field that tells you its position in the at-bat:\nfirst_pitches = data[data['pitch_number'] == 1].copy()\n\n\n\nThe most challenging part was calculating batter aggression metrics. I created three key variables to control for batter tendencies:\n\nOverall swing rate: Percentage of all pitches a batter swings at\nChase rate: Percentage of pitches outside the strike zone a batter swings at\nFirst-pitch swing rate: How often a batter swings at the first pitch\n\nThese metrics required grouping the full dataset by batter and analyzing their behavior across all at-bats, then merging these calculated features back to the first-pitch data.\n\n\n\nOne tricky aspect: the at-bat outcome (hit, out, walk, etc.) only appears on the final pitch of each plate appearance. I had to merge first-pitch data with final outcomes using game identifiers and at-bat numbers to connect each first pitch with how the entire at-bat concluded.\nKey tip for similar projects: Start with a small date range (like one week) to test your code before scaling up to an entire season. The full season took about 10 minutes to download and process.\n\n\n\n\nMy final dataset contains 178,604 at-bats from the 2024 MLB season, representing every first pitch thrown between April 1 and September 30. Here’s what makes this dataset rich for analysis:\n\n651 unique batters and 853 unique pitchers\n20+ variables including pitch type, location, velocity, movement, game context, and batter characteristics\nMultiple outcome categories: Hits, outs, walks, strikeouts, and others\n\n\n\nPitchers threw a first-pitch strike 62.3% of the time—more often than I expected! This suggests that getting ahead in the count is indeed a strategic priority across the league.\n\n\n\nHere’s where it gets interesting. When I compared at-bat outcomes based on that crucial first pitch:\nAfter a first-pitch STRIKE: - Hit rate: 22.2% - Strikeout rate: 24.9% - Walk rate: 5.0%\nAfter a first-pitch BALL: - Hit rate: 21.1% - Strikeout rate: 18.5% - Walk rate: 16.3%\nThe difference is striking. Pitchers record a strikeout 6.4 percentage points more often (24.9% vs 18.5%) when they start with a first-pitch strike—a 35% relative increase. Even more dramatic: batters are more than three times as likely to draw a walk when they get ahead 1-0 (16.3%) compared to falling behind 0-1 (5.0%).\n\n\n\nPerhaps the most fascinating finding came when I segmented batters by their first-pitch swing rate:\n\nPassive batters (low first-pitch swing rate): 28% swing rate on first pitches\nAggressive batters (high first-pitch swing rate): 42% swing rate on first pitches\n\nThe impact of first-pitch strikes varied by batter type, suggesting that the psychological advantage isn’t uniform—it depends on the individual matchup. Aggressive batters who swing at the first pitch might neutralize the pitcher’s advantage, while passive batters who take pitches feel more pressure after falling behind.\n\n\n\nI ran a chi-square test to determine if the relationship between first-pitch outcome and at-bat result was statistically significant. The result? A p-value far below 0.05, confirming that first-pitch outcomes are strongly associated with how at-bats end, even after accounting for batter tendencies.\n\n\n\n\nThis dataset opens up numerous avenues for deeper analysis:\n\nDo certain pitch types (fastball vs. breaking ball) work better as first pitches?\nHow does pitch location affect outcomes?\nAre there times in the game (late innings, high-leverage situations) where first-pitch strikes matter even more?\n\nThe data is rich enough to explore all of these questions and more.\n\n\n\nWant to explore this data yourself or build something similar? Here are the key resources:\n\nPyBaseball Documentation - The Python library I used\nMLB Statcast Search - Explore the data visually\nMy GitHub Repository - Complete code and dataset\n\nThe repository includes: - mlb_first_pitch_data_collection_and_eda.py - Full data collection script & Exploratory data analysis - mlb_first_pitch_data_2024.csv - The complete dataset (if under GitHub’s size limit) - Visualization images generated from the analysis\n\n\n\nWhat started as curiosity about baseball wisdom turned into a data science project that confirmed what coaches have known intuitively: getting ahead in the count matters—a lot. But the data also revealed nuance in how much it matters and for whom, highlighting the complex psychological dynamics at play in America’s pastime.\nThe beauty of working with sports data is that every at-bat tells a story, and when you aggregate 178,604 stories, clear patterns emerge. Whether you’re a baseball fan, a statistics enthusiast, or someone looking for an interesting data project, I hope this inspires you to explore the treasure trove of publicly available sports data.\nNow if you’ll excuse me, I have about 178,000 more at-bats to analyze.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#the-mental-game-behind-every-at-bat",
+    "href": "projects/eda.html#the-mental-game-behind-every-at-bat",
+    "title": "EDA Project",
+    "section": "",
+    "text": "Every baseball fan has heard the mantra: “Get ahead in the count.” Pitching coaches preach it, announcers repeat it, and players live by it. But how much does that first pitch actually matter? Is starting an at-bat 0-1 versus 1-0 just conventional wisdom, or is there real data to back up the psychological advantage?\nAs someone who’s spent countless hours watching baseball, I’ve always been curious about the mental chess match between pitcher and batter. That first pitch sets the tone for everything that follows—but I wanted to move beyond intuition and quantify exactly how outcomes differ based on whether pitchers throw a strike or ball on pitch number one.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#the-question-behind-the-data",
+    "href": "projects/eda.html#the-question-behind-the-data",
+    "title": "EDA Project",
+    "section": "",
+    "text": "My research question: How do at-bat outcomes differ when pitchers throw a strike versus a ball on the first pitch, controlling for batter aggression?\nThis question matters because it gets at the heart of in-game strategy. Should aggressive batters swing at the first pitch? Do passive batters benefit more from getting ahead in the count? Understanding these dynamics could inform coaching decisions and help us appreciate the subtle psychology playing out in every plate appearance.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#data-ethics-and-collection-methodology",
+    "href": "projects/eda.html#data-ethics-and-collection-methodology",
+    "title": "EDA Project",
+    "section": "",
+    "text": "Before diving into web scraping, I needed to ensure my data collection was both ethical and legal. MLB’s Statcast system provides incredibly detailed pitch-by-pitch data, and their copyright policy explicitly permits individual, non-commercial use of this data—perfect for academic projects like this one.\nI used the pybaseball Python library, which serves as an approved wrapper for MLB’s publicly available Statcast API. No API key is required, and the library includes built-in rate limiting and caching to be respectful of MLB’s servers. This approach follows best practices for ethical data collection:\n\nPublic data source: Statcast data is publicly accessible\nRate limiting: Automatic delays between requests prevent server overload\nTerms compliance: Non-commercial academic use is explicitly allowed\nAttribution: All data properly credited to MLB Advanced Media",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#how-to-collect-similar-data",
+    "href": "projects/eda.html#how-to-collect-similar-data",
+    "title": "EDA Project",
+    "section": "",
+    "text": "If you want to explore MLB data for your own project, here’s the streamlined process:\n\n\npip install pybaseball pandas numpy matplotlib seaborn scipy\n\n\n\nfrom pybaseball import statcast, cache\nimport pandas as pd\n\n# Enable caching to speed up repeated queries\ncache.enable()\n\n# Collect pitch-by-pitch data for 2024 season\ndata = statcast(start_dt='2024-04-01', end_dt='2024-09-30')\nThis single function call retrieves every pitch thrown during the specified time period, including detailed information about location, velocity, spin rate, and outcomes.\n\n\n\nThe beauty of Statcast data is that each pitch includes a pitch_number field that tells you its position in the at-bat:\nfirst_pitches = data[data['pitch_number'] == 1].copy()\n\n\n\nThe most challenging part was calculating batter aggression metrics. I created three key variables to control for batter tendencies:\n\nOverall swing rate: Percentage of all pitches a batter swings at\nChase rate: Percentage of pitches outside the strike zone a batter swings at\nFirst-pitch swing rate: How often a batter swings at the first pitch\n\nThese metrics required grouping the full dataset by batter and analyzing their behavior across all at-bats, then merging these calculated features back to the first-pitch data.\n\n\n\nOne tricky aspect: the at-bat outcome (hit, out, walk, etc.) only appears on the final pitch of each plate appearance. I had to merge first-pitch data with final outcomes using game identifiers and at-bat numbers to connect each first pitch with how the entire at-bat concluded.\nKey tip for similar projects: Start with a small date range (like one week) to test your code before scaling up to an entire season. The full season took about 10 minutes to download and process.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#what-the-data-reveals",
+    "href": "projects/eda.html#what-the-data-reveals",
+    "title": "EDA Project",
+    "section": "",
+    "text": "My final dataset contains 178,604 at-bats from the 2024 MLB season, representing every first pitch thrown between April 1 and September 30. Here’s what makes this dataset rich for analysis:\n\n651 unique batters and 853 unique pitchers\n20+ variables including pitch type, location, velocity, movement, game context, and batter characteristics\nMultiple outcome categories: Hits, outs, walks, strikeouts, and others\n\n\n\nPitchers threw a first-pitch strike 62.3% of the time—more often than I expected! This suggests that getting ahead in the count is indeed a strategic priority across the league.\n\n\n\nHere’s where it gets interesting. When I compared at-bat outcomes based on that crucial first pitch:\nAfter a first-pitch STRIKE: - Hit rate: 22.2% - Strikeout rate: 24.9% - Walk rate: 5.0%\nAfter a first-pitch BALL: - Hit rate: 21.1% - Strikeout rate: 18.5% - Walk rate: 16.3%\nThe difference is striking. Pitchers record a strikeout 6.4 percentage points more often (24.9% vs 18.5%) when they start with a first-pitch strike—a 35% relative increase. Even more dramatic: batters are more than three times as likely to draw a walk when they get ahead 1-0 (16.3%) compared to falling behind 0-1 (5.0%).\n\n\n\nPerhaps the most fascinating finding came when I segmented batters by their first-pitch swing rate:\n\nPassive batters (low first-pitch swing rate): 28% swing rate on first pitches\nAggressive batters (high first-pitch swing rate): 42% swing rate on first pitches\n\nThe impact of first-pitch strikes varied by batter type, suggesting that the psychological advantage isn’t uniform—it depends on the individual matchup. Aggressive batters who swing at the first pitch might neutralize the pitcher’s advantage, while passive batters who take pitches feel more pressure after falling behind.\n\n\n\nI ran a chi-square test to determine if the relationship between first-pitch outcome and at-bat result was statistically significant. The result? A p-value far below 0.05, confirming that first-pitch outcomes are strongly associated with how at-bats end, even after accounting for batter tendencies.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#whats-next",
+    "href": "projects/eda.html#whats-next",
+    "title": "EDA Project",
+    "section": "",
+    "text": "This dataset opens up numerous avenues for deeper analysis:\n\nDo certain pitch types (fastball vs. breaking ball) work better as first pitches?\nHow does pitch location affect outcomes?\nAre there times in the game (late innings, high-leverage situations) where first-pitch strikes matter even more?\n\nThe data is rich enough to explore all of these questions and more.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#resources-and-code",
+    "href": "projects/eda.html#resources-and-code",
+    "title": "EDA Project",
+    "section": "",
+    "text": "Want to explore this data yourself or build something similar? Here are the key resources:\n\nPyBaseball Documentation - The Python library I used\nMLB Statcast Search - Explore the data visually\nMy GitHub Repository - Complete code and dataset\n\nThe repository includes: - mlb_first_pitch_data_collection_and_eda.py - Full data collection script & Exploratory data analysis - mlb_first_pitch_data_2024.csv - The complete dataset (if under GitHub’s size limit) - Visualization images generated from the analysis",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/eda.html#final-thoughts",
+    "href": "projects/eda.html#final-thoughts",
+    "title": "EDA Project",
+    "section": "",
+    "text": "What started as curiosity about baseball wisdom turned into a data science project that confirmed what coaches have known intuitively: getting ahead in the count matters—a lot. But the data also revealed nuance in how much it matters and for whom, highlighting the complex psychological dynamics at play in America’s pastime.\nThe beauty of working with sports data is that every at-bat tells a story, and when you aggregate 178,604 stories, clear patterns emerge. Whether you’re a baseball fan, a statistics enthusiast, or someone looking for an interesting data project, I hope this inspires you to explore the treasure trove of publicly available sports data.\nNow if you’ll excuse me, I have about 178,000 more at-bats to analyze.",
+    "crumbs": [
+      "EDA Project"
+    ]
+  },
+  {
+    "objectID": "projects/index.html",
+    "href": "projects/index.html",
+    "title": "Projects Overview",
+    "section": "",
+    "text": "Description: Pick a dataset and explore it to discover insights and answer questions.\n\n\n\nDescription: Find an interesting data source, collect the data, and prepare it for analysis.\n\n\n\nDescription: A comprehensive project that shows off my data science skills.",
+    "crumbs": [
+      "Projects Overview"
+    ]
+  },
+  {
+    "objectID": "projects/index.html#all-projects",
+    "href": "projects/index.html#all-projects",
+    "title": "Projects Overview",
+    "section": "",
+    "text": "Description: Pick a dataset and explore it to discover insights and answer questions.\n\n\n\nDescription: Find an interesting data source, collect the data, and prepare it for analysis.\n\n\n\nDescription: A comprehensive project that shows off my data science skills.",
+    "crumbs": [
+      "Projects Overview"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to My Data Science Portfolio",
+    "section": "",
+    "text": "Welcome to my data science portfolio! This site shows my journey learning data science and analytics. Here you’ll find projects that demonstrate what I’ve learned and discovered.\n\n\nThis portfolio shows my work learning data science. Each project includes:\n\nMy code with documentation\nVisualizations I created\nWhat I learned and discovered\n\nI built this site using Quarto and host it on GitHub Pages.\n\n\n\n\nProgramming: Python, Pandas for data analysis\nVisualization: Creating charts with Matplotlib and Seaborn\nData Collection: Getting data from files, websites, and APIs\nAnalysis: Finding patterns and answering questions with data\n\n\n\n\n\n\n\nLearn how I explore datasets to find interesting patterns and answer questions.\n\n\n\nSee how I gather data from different sources and prepare it for analysis.\n\n\n\nSee how I tackle a data science project beginning to end.\n\n\n\nThanks for visiting! Feel free to explore my projects and see what I’m learning."
+  },
+  {
+    "objectID": "index.html#about-this-portfolio",
+    "href": "index.html#about-this-portfolio",
+    "title": "Welcome to My Data Science Portfolio",
+    "section": "",
+    "text": "This portfolio shows my work learning data science. Each project includes:\n\nMy code with documentation\nVisualizations I created\nWhat I learned and discovered\n\nI built this site using Quarto and host it on GitHub Pages."
+  },
+  {
+    "objectID": "index.html#skills-im-learning",
+    "href": "index.html#skills-im-learning",
+    "title": "Welcome to My Data Science Portfolio",
+    "section": "",
+    "text": "Programming: Python, Pandas for data analysis\nVisualization: Creating charts with Matplotlib and Seaborn\nData Collection: Getting data from files, websites, and APIs\nAnalysis: Finding patterns and answering questions with data"
+  },
+  {
+    "objectID": "index.html#my-projects",
+    "href": "index.html#my-projects",
+    "title": "Welcome to My Data Science Portfolio",
+    "section": "",
+    "text": "Learn how I explore datasets to find interesting patterns and answer questions.\n\n\n\nSee how I gather data from different sources and prepare it for analysis.\n\n\n\nSee how I tackle a data science project beginning to end.\n\n\n\nThanks for visiting! Feel free to explore my projects and see what I’m learning."
+  }
+]
