@@ -1,11 +1,157 @@
 ---
 title: "EDA Project"
-author: "Your Name"
-date: "2025-01-01"
+author: "Walter Vogelmann"
+date: "2025-11-12"
 format:
   html:
     code-fold: true
     toc: true
 ---
 
-This is coming down the pipeline. Check again later.
+# First-Pitch Psychology: Does Getting Ahead in the Count Really Matter?
+
+## The Mental Game Behind Every At-Bat
+
+Every baseball fan has heard the mantra: "Get ahead in the count." Pitching coaches preach it, announcers repeat it, and players live by it. But how much does that first pitch *actually* matter? Is starting an at-bat 0-1 versus 1-0 just conventional wisdom, or is there real data to back up the psychological advantage?
+
+As someone who's spent countless hours watching baseball, I've always been curious about the mental chess match between pitcher and batter. That first pitch sets the tone for everything that follows—but I wanted to move beyond intuition and quantify exactly how outcomes differ based on whether pitchers throw a strike or ball on pitch number one.
+
+## The Question Behind the Data
+
+**My research question:** How do at-bat outcomes differ when pitchers throw a strike versus a ball on the first pitch, controlling for batter aggression?
+
+This question matters because it gets at the heart of in-game strategy. Should aggressive batters swing at the first pitch? Do passive batters benefit more from getting ahead in the count? Understanding these dynamics could inform coaching decisions and help us appreciate the subtle psychology playing out in every plate appearance.
+
+## Data Ethics and Collection Methodology
+
+Before diving into web scraping, I needed to ensure my data collection was both ethical and legal. MLB's Statcast system provides incredibly detailed pitch-by-pitch data, and their [copyright policy](http://gdx.mlb.com/components/copyright.txt) explicitly permits individual, non-commercial use of this data—perfect for academic projects like this one.
+
+I used the `pybaseball` Python library, which serves as an approved wrapper for MLB's publicly available Statcast API. No API key is required, and the library includes built-in rate limiting and caching to be respectful of MLB's servers. This approach follows best practices for ethical data collection:
+
+- **Public data source:** Statcast data is publicly accessible
+- **Rate limiting:** Automatic delays between requests prevent server overload
+- **Terms compliance:** Non-commercial academic use is explicitly allowed
+- **Attribution:** All data properly credited to MLB Advanced Media
+
+## How to Collect Similar Data
+
+If you want to explore MLB data for your own project, here's the streamlined process:
+
+### Step 1: Set Up Your Environment
+
+```python
+pip install pybaseball pandas numpy matplotlib seaborn scipy
+```
+
+### Step 2: Collect Statcast Data
+
+```python
+from pybaseball import statcast, cache
+import pandas as pd
+
+# Enable caching to speed up repeated queries
+cache.enable()
+
+# Collect pitch-by-pitch data for 2024 season
+data = statcast(start_dt='2024-04-01', end_dt='2024-09-30')
+```
+
+This single function call retrieves every pitch thrown during the specified time period, including detailed information about location, velocity, spin rate, and outcomes.
+
+### Step 3: Identify First Pitches
+
+The beauty of Statcast data is that each pitch includes a `pitch_number` field that tells you its position in the at-bat:
+
+```python
+first_pitches = data[data['pitch_number'] == 1].copy()
+```
+
+### Step 4: Engineer Features
+
+The most challenging part was calculating batter aggression metrics. I created three key variables to control for batter tendencies:
+
+- **Overall swing rate:** Percentage of all pitches a batter swings at
+- **Chase rate:** Percentage of pitches outside the strike zone a batter swings at
+- **First-pitch swing rate:** How often a batter swings at the first pitch
+
+These metrics required grouping the full dataset by batter and analyzing their behavior across all at-bats, then merging these calculated features back to the first-pitch data.
+
+### Step 5: Match Outcomes to First Pitches
+
+One tricky aspect: the at-bat outcome (hit, out, walk, etc.) only appears on the *final* pitch of each plate appearance. I had to merge first-pitch data with final outcomes using game identifiers and at-bat numbers to connect each first pitch with how the entire at-bat concluded.
+
+**Key tip for similar projects:** Start with a small date range (like one week) to test your code before scaling up to an entire season. The full season took about 10 minutes to download and process.
+
+## What the Data Reveals
+
+My final dataset contains **178,604 at-bats** from the 2024 MLB season, representing every first pitch thrown between April 1 and September 30. Here's what makes this dataset rich for analysis:
+
+- **651 unique batters** and **853 unique pitchers**
+- **20+ variables** including pitch type, location, velocity, movement, game context, and batter characteristics
+- **Multiple outcome categories:** Hits, outs, walks, strikeouts, and others
+
+### The Strike-Ball Split
+
+Pitchers threw a first-pitch strike **62.3% of the time**—more often than I expected! This suggests that getting ahead in the count is indeed a strategic priority across the league.
+
+### Does It Actually Matter?
+
+Here's where it gets interesting. When I compared at-bat outcomes based on that crucial first pitch:
+
+**After a first-pitch STRIKE:**
+- Hit rate: 22.2%
+- Strikeout rate: 24.9%
+- Walk rate: 5.0%
+
+**After a first-pitch BALL:**
+- Hit rate: 21.1%
+- Strikeout rate: 18.5%
+- Walk rate: 16.3%
+
+The difference is striking. Pitchers record a strikeout **6.4 percentage points more often** (24.9% vs 18.5%) when they start with a first-pitch strike—a 35% relative increase. Even more dramatic: batters are **more than three times as likely to draw a walk** when they get ahead 1-0 (16.3%) compared to falling behind 0-1 (5.0%).
+
+### Controlling for Batter Aggression
+
+Perhaps the most fascinating finding came when I segmented batters by their first-pitch swing rate:
+
+- **Passive batters** (low first-pitch swing rate): 28% swing rate on first pitches
+- **Aggressive batters** (high first-pitch swing rate): 42% swing rate on first pitches
+
+The impact of first-pitch strikes varied by batter type, suggesting that the psychological advantage isn't uniform—it depends on the individual matchup. Aggressive batters who swing at the first pitch might neutralize the pitcher's advantage, while passive batters who take pitches feel more pressure after falling behind.
+
+### The Numbers Don't Lie
+
+I ran a chi-square test to determine if the relationship between first-pitch outcome and at-bat result was statistically significant. The result? A p-value far below 0.05, confirming that **first-pitch outcomes are strongly associated with how at-bats end**, even after accounting for batter tendencies.
+
+## What's Next?
+
+This dataset opens up numerous avenues for deeper analysis:
+
+- Do certain pitch types (fastball vs. breaking ball) work better as first pitches?
+- How does pitch location affect outcomes?
+- Are there times in the game (late innings, high-leverage situations) where first-pitch strikes matter even more?
+
+The data is rich enough to explore all of these questions and more.
+
+## Resources and Code
+
+Want to explore this data yourself or build something similar? Here are the key resources:
+
+- [PyBaseball Documentation](https://github.com/jldbc/pybaseball) - The Python library I used
+- [MLB Statcast Search](https://baseballsavant.mlb.com/statcast_search) - Explore the data visually
+- [My GitHub Repository](https://github.com/waltervogelmann/Data-Acquisition-Blog) - Complete code and dataset
+
+The repository includes:
+- `mlb_first_pitch_data_collection_and_eda.py` - Full data collection script & Exploratory data analysis
+- `mlb_first_pitch_data_2024.csv` - The complete dataset (if under GitHub's size limit)
+- Visualization images generated from the analysis
+
+## Final Thoughts
+
+What started as curiosity about baseball wisdom turned into a data science project that confirmed what coaches have known intuitively: getting ahead in the count matters—a lot. But the data also revealed nuance in *how* much it matters and *for whom*, highlighting the complex psychological dynamics at play in America's pastime.
+
+The beauty of working with sports data is that every at-bat tells a story, and when you aggregate 178,604 stories, clear patterns emerge. Whether you're a baseball fan, a statistics enthusiast, or someone looking for an interesting data project, I hope this inspires you to explore the treasure trove of publicly available sports data.
+
+Now if you'll excuse me, I have about 178,000 more at-bats to analyze.
+
+---
